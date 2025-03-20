@@ -1,0 +1,22 @@
+const express = require('express');
+const cors = require('cors');
+const cvController = require('./controllers/cvController');
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
+app.get('/templates', cvController.getTemplates);
+app.post('/upload', cvController.uploadCv);
+app.post('/ocr', cvController.processOcr);
+app.post('/save', cvController.saveCv);
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
