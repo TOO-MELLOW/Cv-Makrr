@@ -1,3 +1,4 @@
-# cv-maker-backend/.gitignore
+# cv-maker-frontend/.gitignore
 node_modules/
 .env
+dist/
