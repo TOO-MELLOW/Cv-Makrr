@@ -1,20 +1,29 @@
-require('dotenv').config(); // Add this line at the top
-const express = require('express');
-const mongoose = require('mongoose');
-const express = require('express');
+// server.js
+require('dotenv').config(); // Load environment variables
+const express = require('express'); // Only declare express once
 const mongoose = require('mongoose');
 const connectDB = require('./config/db');
+const authRoutes = require('./routes/auth');
+const cvRoutes = require('./routes/cv');
+const ocrRoutes = require('./routes/ocr');
+const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
 // Connect to MongoDB
 connectDB();
 
-// Middleware and routes
+// Middleware
 app.use(express.json());
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/cv', require('./routes/cv'));
-app.use('/api/ocr', require('./routes/ocr'));
 
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/cv', cvRoutes);
+app.use('/api/ocr', ocrRoutes);
+
+// Error handler
+app.use(errorHandler);
+
+// Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
