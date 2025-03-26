@@ -1,0 +1,40 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install backend dependencies
+      run: npm install
+      working-directory: backend
+
+    - name: Build backend application
+      run: npm run build
+      working-directory: backend
+
+    - name: Install frontend dependencies
+      run: npm install
+      working-directory: frontend
+
+    - name: Build frontend application
+      run: npm run build
+      working-directory: frontend
+
+    - name: Deploy to Server
+      run: |
+        scp -r backend/index.js user@server:/opt/render/project/src/backend/
+        ssh user@server 'cd /opt/render/project/src/backend && npm install && pm2 restart index.js'
